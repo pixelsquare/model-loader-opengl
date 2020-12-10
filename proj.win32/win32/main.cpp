@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <Windows.h>
 
 #define PI 3.14159265
 
@@ -84,12 +85,36 @@ public:
 
 	void LoadObj(const char *OBJFile)
 	{
-		ifstream ifs(OBJFile);
+		char pwd[MAX_PATH];
+		GetCurrentDirectory(MAX_PATH, pwd);
 
-		while(!ifs.eof()) // eof = End of File
+		std::string path(pwd);
+
+		if (IsDebuggerPresent())
 		{
-			char data[100];
-			ifs >> data;
+#if DEBUG
+			path = path + "\\Debug.win32\\" + OBJFile;
+#else
+			path = path + "\\Release.win32\\" + OBJFile;
+#endif
+		}
+		else
+		{
+			path = path + "\\" + OBJFile;
+		}
+
+		printf("Loading .. %s\n", path.c_str());
+		ifstream ifs(path);
+
+		ifstream file(path, ios::binary);
+		long len = file.tellg();
+		file.close();
+
+		printf("%lu\n", len);
+
+		char data[100];
+		while(ifs >> data) // eof = End of File
+		{
 			if(strcmp(data, "v") == 0) // strcmp = string compare
 			{
 				float x, y, z;
@@ -178,8 +203,9 @@ public:
 
 				}
 			}
-
 		}
+
+		ifs.close();
 	}
 
 	void RenderModel()
@@ -308,7 +334,7 @@ void main (int argc, char **argv)
 	scaleFactor = 0.0f; xFactor = 0.0f; yFactor = 0.0f; zFactor = 0.0f;
 
 	int choose; float angle; string OBJname;
-	choose = 0; angle = 0.0f; OBJname = "galaga ship.obj";
+	choose = 0; angle = 0.0f; OBJname = "assets\\galaga ship.obj";
 
 	//cout << "Model Name[filename]: ";
 	//getline(cin, OBJname);
@@ -332,51 +358,46 @@ void main (int argc, char **argv)
 	case 1:
 		cout << "Enter the value of tx, ty, and tz: ";
 		cin >> translateX >> translateY >> translateZ;
-		GalagaShip.LoadObj(modelName);
+		GalagaShip.LoadObj(OBJname.c_str());
 		GalagaShip.Translate(translateX, translateY, translateZ);
-		cout << endl << "Loading " << OBJname << " ...";
 		break;
 
 	case 2:
 		cout << "Enter the angle: ";
 		cin >> angle;
 		GalagaShip.RotateX(angle);
-		GalagaShip.LoadObj("galaga ship.obj");
-		cout << endl << "Loading " << OBJname << " ...";
+		GalagaShip.LoadObj(OBJname.c_str());
 		break;
 
 	case 3:
 		cout << "Enter the angle: ";
 		cin >> angle;
 		GalagaShip.RotateY(angle);
-		GalagaShip.LoadObj("galaga ship.obj");
-		cout << endl << "Loading " << OBJname << " ...";
+		GalagaShip.LoadObj(OBJname.c_str());
 		break;
 
 	case 4:
 		cout << "Enter the angle: ";
 		cin >> angle;
 		GalagaShip.RotateZ(angle);
-		GalagaShip.LoadObj("galaga ship.obj");
-		cout << endl << "Loading " << OBJname << " ...";
+		GalagaShip.LoadObj(OBJname.c_str());
 		break;
 
 	case 5:
 		cout << "Enter the value of sf, xf, yf, and zf: ";
 		cin >> scaleFactor >> xFactor >> yFactor >> zFactor;
-		GalagaShip.LoadObj("galaga ship.obj");
+		GalagaShip.LoadObj(OBJname.c_str());
 		GalagaShip.Scale(scaleFactor, xFactor, yFactor, zFactor);
-		cout << endl << "Loading " << OBJname << " ...";
 		break;
 
 	default:
-		GalagaShip.LoadObj("galaga ship.obj");
-		cout << endl << "Loading " << OBJname << " ...";
+		GalagaShip.RotateX(90);
+		GalagaShip.LoadObj(OBJname.c_str());
 		break;
 	}
 
 	//GalagaShip.RotateX(90);
-	//GalagaShip.LoadObj("galaga ship.obj");
+	//GalagaShip.LoadObj(OBJname.c_str());
 	//GalagaShip.Translate(0.0f, -25.0f, 0.0f);
 	//GalagaShip.Scale(0.5f, 0.0f, 0.0f, 0.0f);
 

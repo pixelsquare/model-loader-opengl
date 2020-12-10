@@ -15,19 +15,19 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="LoadModel.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="GLUTSetup.h">
+    <ClInclude Include="..\model-loader\GLUTSetup.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ModelData.h">
-      <Filter>Resource Files</Filter>
+    <ClInclude Include="..\model-loader\ModelData.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ModelParser.h">
-      <Filter>Resource Files</Filter>
+    <ClInclude Include="..\model-loader\ModelParser.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="win32\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

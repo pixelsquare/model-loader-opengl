@@ -1,0 +1,13 @@
+GLUT Library installtion
+
+glut.lib, glut32.lib
+- copy to C:\Program Files\Microsoft Visual Studio 10.0\VC\Lib
+
+glut.h
+- copy to C:\Program Files\Microsoft Visual Studio 10.0\VC\include
+
+glut.dll, glut32.dll
+- copy to C:\Windows\System32
+- for 64bit computers, copy to C:\Windows\System (according to John)
+
+=.)

@@ -10,21 +10,31 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\model-loader\GLUTSetup.h" />
+    <ClInclude Include="..\model-loader\ModelData.h" />
+    <ClInclude Include="..\model-loader\ModelParser.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="win32\main.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{EA3994A1-29FE-40A8-A855-71C76669BA01}</ProjectGuid>
-    <RootNamespace>LoadModel</RootNamespace>
+    <RootNamespace>model-loader</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -36,15 +46,30 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)Debug.win32</OutDir>
+    <IntDir>vs\$(Configuration)\</IntDir>
+    <IncludePath>$(ProjectDir)..\model-loader;$(ProjectDir)..\gl\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)..\gl\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)Release.win32</OutDir>
+    <IntDir>vs\$(Configuration)\</IntDir>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile />
+    <Link />
+    <PostBuildEvent>
+      <Command>echo Copying glut libraries ...
+xcopy /e /y "$(ProjectDir)..\gl\lib" "$(OutDir)"
+
+echo Copying assets ...
+mkdir "$(OutDir)assets"
+xcopy /e /y "$(ProjectDir)..\assets" "$(OutDir)assets"</Command>
+    </PostBuildEvent>
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
-      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <Link>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -59,15 +84,11 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="LoadModel.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="GLUTSetup.h" />
-    <ClInclude Include="ModelData.h" />
-    <ClInclude Include="ModelParser.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
+  <Target Name="AfterClean">
+    <!-- Removes output directory -->
+    <RemoveDir Directories="$(OutDir)" />
+  </Target>
 </Project>
