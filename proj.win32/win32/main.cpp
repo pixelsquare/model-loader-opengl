@@ -106,12 +106,6 @@ public:
 		printf("Loading .. %s\n", path.c_str());
 		ifstream ifs(path);
 
-		ifstream file(path, ios::binary);
-		long len = file.tellg();
-		file.close();
-
-		printf("%lu\n", len);
-
 		char data[100];
 		while(ifs >> data) // eof = End of File
 		{
